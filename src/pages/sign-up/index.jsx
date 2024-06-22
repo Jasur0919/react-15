@@ -1,3 +1,124 @@
+// import * as React from "react";
+// import Avatar from "@mui/material/Avatar";
+// import Button from "@mui/material/Button";
+// import CssBaseline from "@mui/material/CssBaseline";
+// import TextField from "@mui/material/TextField";
+// import Grid from "@mui/material/Grid";
+// import Box from "@mui/material/Box";
+// import Typography from "@mui/material/Typography";
+// import Container from "@mui/material/Container";
+// import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import { useState } from "react";
+// import { auth } from "@service";
+// import "./index.css"
+// const defaultTheme = createTheme();
+
+// export default function SignUp() {
+//   const [formData, setFormData] = useState({});
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     try {
+//       const result = await auth.sign_up(formData);
+//       console.log(result);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   const handleChange = (event) => {
+//     const { name, value } = event.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   return (
+//     <div className="logol">
+//     <ThemeProvider theme={defaultTheme}>
+//       <Container component="main" maxWidth="xs">
+//         <CssBaseline />
+//         <Box
+//           sx={{
+//             marginTop: 8,
+//             display: "flex",
+//             flexDirection: "column",
+//             alignItems: "center",
+//           }}
+//         >
+//           {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
+//           <Typography component="h1" variant="h5">
+//             Sign up
+//           </Typography>
+//           <Box
+//             component="form"
+//             noValidate
+//             onSubmit={handleSubmit}
+//             sx={{ mt: 3 }}
+//           >
+//             <Grid container spacing={2}>
+//               <Grid item xs={12}>
+//                 <TextField
+//                   required
+//                   fullWidth
+//                   id="fullName"
+//                   label="Full Name"
+//                   name="full_name"
+//                   autoComplete="fullName"
+//                   onChange={handleChange}
+//                 />
+//               </Grid>
+//               <Grid item xs={12}>
+//                 <TextField
+//                   required
+//                   fullWidth
+//                   id="email"
+//                   label="Email Address"
+//                   name="email"
+//                   autoComplete="email"
+//                   onChange={handleChange}
+//                 />
+//               </Grid>
+//               <Grid item xs={12}>
+//                 <TextField
+//                   required
+//                   fullWidth
+//                   name="password"
+//                   label="Password"
+//                   type="password"
+//                   id="password"
+//                   autoComplete="new-password"
+//                   onChange={handleChange}
+//                 />
+//               </Grid>
+//               <Grid item xs={12}>
+//                 <TextField
+//                   required
+//                   fullWidth
+//                   name="phone_number"
+//                   label="Phone Number"
+//                   type="text"
+//                   id="phone_number"
+//                   onChange={handleChange}
+//                 />
+//               </Grid>
+//             </Grid>
+
+//             <Button
+//               type="submit"
+//               fullWidth
+//               variant="contained"
+//               sx={{ mt: 3, mb: 2 }}
+//             >
+//               Sign Up
+//             </Button>
+//           </Box>
+//         </Box>
+//       </Container>
+//     </ThemeProvider>
+//     </div>
+//   );
+// }
+
+
+
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -7,21 +128,43 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { auth } from "@service";
-import "./index.css"
+import "./index.css";
+
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const handleSubmit = async (event) => {
+  const [open, setOpen] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+
+  const handleSubmit = (event) => {
     event.preventDefault();
+    setOpen(true); // Open the modal immediately after clicking Sign Up
+  };
+
+  const handleVerification = async () => {
     try {
-      const result = await auth.sign_up(formData);
+      const result = await auth.sign_up({ ...formData, verification_code: verificationCode });
       console.log(result);
+      if (result.success) {
+        setOpen(false); // Close the modal upon successful registration
+        // Handle successful registration (e.g., redirect to login page or home)
+      } else {
+        // Handle unsuccessful registration, e.g., show an error message
+        alert("Verification failed, please try again.");
+      }
     } catch (error) {
       console.log(error);
+      // Optionally handle errors
+      alert("An error occurred during verification. Please try again.");
     }
   };
 
@@ -30,89 +173,117 @@ export default function SignUp() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleVerificationCodeChange = (event) => {
+    setVerificationCode(event.target.value);
+  };
+
   return (
     <div className="logol">
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="fullName"
-                  label="Full Name"
-                  name="full_name"
-                  autoComplete="fullName"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="phone_number"
-                  label="Phone Number"
-                  type="text"
-                  id="phone_number"
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}
             >
-              Sign Up
-            </Button>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="fullName"
+                    label="Full Name"
+                    name="full_name"
+                    autoComplete="fullName"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="phone_number"
+                    label="Phone Number"
+                    type="text"
+                    id="phone_number"
+                    onChange={handleChange}
+                  />
+                </Grid>
+              </Grid>
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign Up
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Email Verification</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter the verification code sent to your email.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="verificationCode"
+            label="Verification Code"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={verificationCode}
+            onChange={handleVerificationCodeChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleVerification}>Verify</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
