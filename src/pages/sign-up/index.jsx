@@ -1,122 +1,3 @@
-// import * as React from "react";
-// import Avatar from "@mui/material/Avatar";
-// import Button from "@mui/material/Button";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import TextField from "@mui/material/TextField";
-// import Grid from "@mui/material/Grid";
-// import Box from "@mui/material/Box";
-// import Typography from "@mui/material/Typography";
-// import Container from "@mui/material/Container";
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import { useState } from "react";
-// import { auth } from "@service";
-// import "./index.css"
-// const defaultTheme = createTheme();
-
-// export default function SignUp() {
-//   const [formData, setFormData] = useState({});
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     try {
-//       const result = await auth.sign_up(formData);
-//       console.log(result);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setFormData({ ...formData, [name]: value });
-//   };
-
-//   return (
-//     <div className="logol">
-//     <ThemeProvider theme={defaultTheme}>
-//       <Container component="main" maxWidth="xs">
-//         <CssBaseline />
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: "flex",
-//             flexDirection: "column",
-//             alignItems: "center",
-//           }}
-//         >
-//           {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
-//           <Typography component="h1" variant="h5">
-//             Sign up
-//           </Typography>
-//           <Box
-//             component="form"
-//             noValidate
-//             onSubmit={handleSubmit}
-//             sx={{ mt: 3 }}
-//           >
-//             <Grid container spacing={2}>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   fullWidth
-//                   id="fullName"
-//                   label="Full Name"
-//                   name="full_name"
-//                   autoComplete="fullName"
-//                   onChange={handleChange}
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   fullWidth
-//                   id="email"
-//                   label="Email Address"
-//                   name="email"
-//                   autoComplete="email"
-//                   onChange={handleChange}
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   fullWidth
-//                   name="password"
-//                   label="Password"
-//                   type="password"
-//                   id="password"
-//                   autoComplete="new-password"
-//                   onChange={handleChange}
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   required
-//                   fullWidth
-//                   name="phone_number"
-//                   label="Phone Number"
-//                   type="text"
-//                   id="phone_number"
-//                   onChange={handleChange}
-//                 />
-//               </Grid>
-//             </Grid>
-
-//             <Button
-//               type="submit"
-//               fullWidth
-//               variant="contained"
-//               sx={{ mt: 3, mb: 2 }}
-//             >
-//               Sign Up
-//             </Button>
-//           </Box>
-//         </Box>
-//       </Container>
-//     </ThemeProvider>
-//     </div>
-//   );
-// }
-
 
 
 import * as React from "react";
@@ -147,7 +28,7 @@ export default function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setOpen(true); // Open the modal immediately after clicking Sign Up
+    setOpen(true);
   };
 
   const handleVerification = async () => {
@@ -155,15 +36,12 @@ export default function SignUp() {
       const result = await auth.sign_up({ ...formData, verification_code: verificationCode });
       console.log(result);
       if (result.success) {
-        setOpen(false); // Close the modal upon successful registration
-        // Handle successful registration (e.g., redirect to login page or home)
+        setOpen(false); 
       } else {
-        // Handle unsuccessful registration, e.g., show an error message
         alert("Verification failed, please try again.");
       }
     } catch (error) {
       console.log(error);
-      // Optionally handle errors
       alert("An error occurred during verification. Please try again.");
     }
   };
@@ -190,7 +68,6 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
