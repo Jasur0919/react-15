@@ -1,5 +1,20 @@
 .logol {
     display: flex;
-    justify-content: center;align-items: center;
-    margin-left: 550px;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.4);
+    animation: animate 1s ease-out 0s forwards;
+    opacity: 0;
+}
+
+@keyframes animate {
+    to{
+        top: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+
+    }
 }
