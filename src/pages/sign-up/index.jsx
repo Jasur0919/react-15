@@ -1,5 +1,3 @@
-
-
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -26,35 +24,38 @@ export default function SignUp() {
   const [open, setOpen] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      const result = await auth.sign_up(formData);
-      console.log(result);
-      if (result.success) {
-      } else {
-        alert("Failed to send verification code. Please try again.");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("An error occurred. Please try again.");
-    }
+    setOpen(true); // Open the modal immediately after clicking Sign Up
   };
+
 
   const handleVerification = async () => {
     try {
-      const result = await auth.verify_code({ ...formData, verification_code: verificationCode });
+      const result = await auth.sign_up({ ...formData, verification_code: verificationCode });
       console.log(result);
       if (result.success) {
         setOpen(false); 
       } else {
-        alert("Verification failed, please try again.");
+        console.error("Verification failed:", result.error); 
+        alert("Verification failed. Please try again."); 
       }
     } catch (error) {
-      console.log(error);
-      alert("An error occurred during verification. Please try again.");
+      console.error("Error during verification:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        alert(`Verification failed: ${error.response.data.message}`);
+      } else if (error.request) {
+        console.error("Request:", error.request);
+        alert("No response received from server. Please try again later.");
+      } else {
+        console.error("Error message:", error.message);
+        alert("An error occurred. Please try again.");
+      }
     }
   };
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -78,6 +79,7 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
+            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar> */}
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
