@@ -26,14 +26,24 @@ export default function SignUp() {
   const [open, setOpen] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setOpen(true);
+    try {
+      const result = await auth.sign_up(formData);
+      console.log(result);
+      if (result.success) {
+      } else {
+        alert("Failed to send verification code. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   const handleVerification = async () => {
     try {
-      const result = await auth.sign_up({ ...formData, verification_code: verificationCode });
+      const result = await auth.verify_code({ ...formData, verification_code: verificationCode });
       console.log(result);
       if (result.success) {
         setOpen(false); 
